@@ -20,7 +20,7 @@ export function PaletteRow(props: IPaletteProps) {
       //   }}>
       //   {l * 10}
       // </span>;
-      return <PaletteSwatch l={l} c={c} h={props.hue}></PaletteSwatch>
+      return <PaletteSwatch l={l} c={c} h={props.hue} key={i}></PaletteSwatch>
     }
     )}
   </div>)

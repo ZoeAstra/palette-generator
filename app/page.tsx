@@ -1,4 +1,5 @@
 'use client'
+import { HueSlider } from "@/components/hue-slider";
 import { PaletteRow } from "@/components/palette-row";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,7 +43,7 @@ export default function Home() {
     setPalettes(palettes.filter((_, i) => i != index));
   }
   return (
-    <div className="justify-center flex pl-1 pr-1">
+    <div className="justify-center flex pl-1 pr-1" >
       <div className="flex flex-col">
         <span className="text-6xl self-center">Zoe's Palette Generator</span>
         <div className="flex flex-row pb-1 pt-1">
@@ -50,7 +51,7 @@ export default function Home() {
             <Button onClick={(e) => addNewColumn(0)}><PlusIcon></PlusIcon></Button>
           </div>
           {columns.map((column, i) => {
-            return <div className="flex w-24 justify-center border-r-2"> 
+            return <div className="flex w-24 justify-center border-r-2" key={i}> 
                 <Input className="w-18" 
                 value={column} 
                 key={i} 
@@ -64,7 +65,8 @@ export default function Home() {
         <div className="flex flex-col pb-1 pt-1">
           {palettes.map((palette, i) =>
             <div className="flex flex-row" key={i}>
-              <div className="self-center w-50">
+              <div className="self-center w-50"
+              >
                 <Input
                   type="text"
                   placeholder="Name"
@@ -85,6 +87,10 @@ export default function Home() {
                     hue: !Number.isNaN(Number(e.target.value)) ? Number(e.target.value) : 0
                   })}
                 />
+                <HueSlider defaultValue={[palette.hue]} onValueChange={(e) => e.values().forEach(value => updatePalettes(i, {
+                    name: palette.name,
+                    hue: !Number.isNaN(Number(value)) ? Number(value) : 0
+                  }))} max={360} min={0}  />
               </div>
               <PaletteRow hue={palette.hue} columns={columns} />
               <div className="self-center w-10">
