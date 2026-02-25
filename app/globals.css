@@ -124,3 +124,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+.no-spinner-buttons {
+  &input::-webkit-outer-spin-button,
+  &input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  &input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+}
