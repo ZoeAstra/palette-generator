@@ -1,21 +1,57 @@
 'use client'
 import { Header } from "@/components/header";
 import { HueSlider } from "@/components/hue-slider";
-import { Column, Palette, PaletteRow } from "@/components/palette-row";
+import { PaletteRow, Column } from "@/components/palette-row";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Palette, Swatch, Calculation } from "@/models/palette";
 import { move } from "@dnd-kit/helpers";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
 import { PlusIcon, SettingsIcon, TrashIcon } from "lucide-react";
+import { AnimatePresence } from "motion/react";
 import { useRef, useState } from "react";
 
 
-
 export default function Home() {
-  const [palettes, setPalettes] = useState<Palette[]>([{ name: 'blue', id: crypto.randomUUID(), hue: 240 }, 
-    { name: 'red', id: crypto.randomUUID(), hue: 20 }, 
-    { name: 'green', id: crypto.randomUUID(), hue: 140 }
+  const manualCalculation: Calculation = {
+    type: "manual",
+  };
+  const startingValues = [{l:.9,}]
+  const [palettes, setPalettes] = useState<Palette[]>([
+    { name: 'blue', id: crypto.randomUUID(), hue: 240, swatches: [
+      {id: crypto.randomUUID(), l: .9, c: .131},
+      {id: crypto.randomUUID(), l: .8, c: .159},
+      {id: crypto.randomUUID(), l: .7, c: .181},
+      {id: crypto.randomUUID(), l: .6, c: .195},
+      {id: crypto.randomUUID(), l: .5, c: .200},
+      {id: crypto.randomUUID(), l: .4, c: .195},
+      {id: crypto.randomUUID(), l: .3, c: .181},
+      {id: crypto.randomUUID(), l: .2, c: .159},
+      {id: crypto.randomUUID(), l: .1, c: .131}], 
+      lightnessCalculation: manualCalculation, chromaCalculation: manualCalculation }, 
+    { name: 'red', id: crypto.randomUUID(), hue: 20, swatches: [
+      {id: crypto.randomUUID(), l: .9, c: .131},
+      {id: crypto.randomUUID(), l: .8, c: .159},
+      {id: crypto.randomUUID(), l: .7, c: .181},
+      {id: crypto.randomUUID(), l: .6, c: .195},
+      {id: crypto.randomUUID(), l: .5, c: .200},
+      {id: crypto.randomUUID(), l: .4, c: .195},
+      {id: crypto.randomUUID(), l: .3, c: .181},
+      {id: crypto.randomUUID(), l: .2, c: .159},
+      {id: crypto.randomUUID(), l: .1, c: .131}],
+      lightnessCalculation: manualCalculation, chromaCalculation: manualCalculation }, 
+    { name: 'green', id: crypto.randomUUID(), hue: 140, swatches: [
+      {id: crypto.randomUUID(), l: .9, c: .131},
+      {id: crypto.randomUUID(), l: .8, c: .159},
+      {id: crypto.randomUUID(), l: .7, c: .181},
+      {id: crypto.randomUUID(), l: .6, c: .195},
+      {id: crypto.randomUUID(), l: .5, c: .200},
+      {id: crypto.randomUUID(), l: .4, c: .195},
+      {id: crypto.randomUUID(), l: .3, c: .181},
+      {id: crypto.randomUUID(), l: .2, c: .159},
+      {id: crypto.randomUUID(), l: .1, c: .131}],
+      lightnessCalculation: manualCalculation, chromaCalculation: manualCalculation }
   ]);
   const [columns, setColumns] = useState<Column[]>([{value:100, id: crypto.randomUUID()},
     {value:200, id: crypto.randomUUID()},
@@ -28,6 +64,16 @@ export default function Home() {
     {value:900, id: crypto.randomUUID()}
   ]);
 
+  // can't be deterministically calculated based on inputs, as it may be manual. This will likely need custom handling in the handlers themselves
+  // useEffect(() => {
+  //   const nextPalettes = palettes.map((palette) => {
+  //     const step = 
+  //     return {
+  //       swatches: columns.map((col) => {id: crypto.randomUUID(), l: palette.lightnessCalculation() })
+  //     } as Palette;
+  //   })
+  // },[columns])
+
 
   function updatePalettes(index: number, value: Palette) {
     const nextPalettes = palettes.map((p, i) => {
@@ -37,7 +83,17 @@ export default function Home() {
     setPalettes(nextPalettes);
   }
   function addNewPalette(name: string, hue: number) {
-    setPalettes([...palettes, { name, id: crypto.randomUUID(), hue }])
+    setPalettes([...palettes, { name, id: crypto.randomUUID(), hue, swatches: [
+      {id: crypto.randomUUID(), l: .9, c: .131},
+      {id: crypto.randomUUID(), l: .8, c: .159},
+      {id: crypto.randomUUID(), l: .7, c: .181},
+      {id: crypto.randomUUID(), l: .6, c: .195},
+      {id: crypto.randomUUID(), l: .5, c: .200},
+      {id: crypto.randomUUID(), l: .4, c: .195},
+      {id: crypto.randomUUID(), l: .3, c: .181},
+      {id: crypto.randomUUID(), l: .2, c: .159},
+      {id: crypto.randomUUID(), l: .1, c: .131}],
+      lightnessCalculation: manualCalculation, chromaCalculation: manualCalculation }])
   }
   function removePalette(index: number) {
     setPalettes(palettes.filter((_, i) => i != index));
@@ -55,10 +111,11 @@ export default function Home() {
   function removeColumn(index: number) {
     setColumns(columns.filter((_, i) => i != index));
   }
+
   return (
     <div className="justify-center flex pl-1 pr-1" >
       <div className="flex flex-col">
-        <span className="text-6xl self-center">Zoe's Palette Generator</span>
+        <span className="text-6xl self-center">Palette Generator</span>
         <div className="flex flex-row pb-1 pt-1">
           <div className="w-30 flex hover flex-row justify-end pl-0.5 pr-0.5">
             <Button onClick={(e) => addNewColumn(0)}><PlusIcon/> Add Column</Button>
@@ -78,12 +135,13 @@ export default function Home() {
           </DragDropProvider>
         </div>
         <div className="flex flex-col pb-1 pt-1">
-          <DragDropProvider>
+          
+          <DragDropProvider><AnimatePresence>
           {palettes.map((palette, i) => {
             return <PaletteRow key={palette.id} palette={palette} index={i} updatePalettes={updatePalettes} columns={columns} removePalette={removePalette} />;
             }
           )}
-          </DragDropProvider>
+          </AnimatePresence></DragDropProvider>
         </div>
         <div className="flex flex-row pb-1 pt-1">
           <div className="w-30 flex hover flex-row justify-end pl-0.5 pr-0.5">
