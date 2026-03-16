@@ -136,3 +136,7 @@
     appearance: textfield;
   }
 }
+
+.hover-shadow-top-bottom-border:hover {
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.2), 0 -1px rgba(0, 0, 0, 0.2) inset;
+}

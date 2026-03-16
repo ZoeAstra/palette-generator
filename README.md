@@ -4,7 +4,10 @@ A simple palette generator in Next.js with shadcn components and tailwind, made 
 - Generates palette swatches using oklch and some clever math
 - Add more rows (or remove them)
 - Add more columns (removal not implemented)
-- Select color for each row via slider or numeric hue input
+- Select color for each row via numeric hue input
+- Expand row for detailed tweaks to chroma and luminosity
+
+I'm also doing this all by hand, as [recent](https://www.thelancet.com/journals/langas/article/PIIS2468-1253(25)00133-5/abstract) [studies](https://pmc.ncbi.nlm.nih.gov/articles/PMC11239631/) have shown that skills can decay with excessive AI use, so I am using this project as a 'whetstone' for keeping my programming skills sharp.
 
 ## Getting Started
 
